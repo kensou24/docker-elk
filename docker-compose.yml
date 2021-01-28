@@ -22,7 +22,34 @@ services:
       ELASTIC_PASSWORD: changeme
       # Use single node discovery in order to disable production mode and avoid bootstrap checks.
       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
-      discovery.type: single-node
+      # discovery.type: single-node
+    networks:
+      - elk
+
+  elasticsearch2:
+    build:
+      context: elasticsearch2/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - type: bind
+        source: ./elasticsearch2/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: volume
+        source: elasticsearch2
+        target: /usr/share/elasticsearch/data
+    ports:
+      - "9201:9200"
+      - "9301:9300"
+    links:
+      - elasticsearch
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      # discovery.type: single-node
     networks:
       - elk
 
@@ -42,9 +69,9 @@ services:
         read_only: true
     ports:
       - "5044:5044"
-      - "5000:5000/tcp"
+      - "5001:5001/tcp"
       - "15515:15515/tcp"
-      - "5000:5000/udp"
+      - "5001:5001/udp"
       - "9600:9600"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
@@ -76,3 +103,4 @@ networks:
 
 volumes:
   elasticsearch:
+  elasticsearch2:

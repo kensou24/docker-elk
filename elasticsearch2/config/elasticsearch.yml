@@ -5,10 +5,11 @@
 cluster.name: "docker-cluster"
 network.host: 0.0.0.0
 
-node.name: node1
+node.name: node2
 node.max_local_storage_nodes: 5
 discovery.zen.ping.unicast.hosts: [elasticsearch:9300,elasticsearch2:9300]
 discovery.zen.minimum_master_nodes: 1
+#es.enforce.bootstrap.checks: false
 
 ## X-Pack settings
 ## see https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-xpack.html
